@@ -248,9 +248,10 @@ function goFS(){
 }
 function fsChange(){ setClass(document.body, "isfs", !!(document.fullscreenElement || document.webkitFullscreenElement)); }
 document.getElementById("fs").onclick = goFS;
+document.addEventListener("click", function(e){ if (!(document.fullscreenElement || document.webkitFullscreenElement) && !(e.target.closest && e.target.closest("#pick"))) goFS(); });
 document.addEventListener("keydown", function(e){
   if (hasClass(document.getElementById("pick"), "show")) return;
-  if (e.keyCode === 13 || e.key === "f" || e.key === "F") goFS();
+  if (e.keyCode === 13 || (e.keyCode >= 37 && e.keyCode <= 40) || (e.keyCode >= 48 && e.keyCode <= 57) || e.key === "f" || e.key === "F") goFS();
 });
 document.addEventListener("fullscreenchange", fsChange);
 document.addEventListener("webkitfullscreenchange", fsChange);
@@ -270,7 +271,7 @@ poll();
 setInterval(poll, POLL_MS);
 /* refresh every 6 hours (only when online) to keep long-running TV browsers healthy */
 if (!PREVIEW) setInterval(function(){
-  if (Date.now() - BOOT > 6 * 60 * 60 * 1000 && fails === 0 && navigator.onLine !== false) location.reload();
+  if (Date.now() - BOOT > 6 * 60 * 60 * 1000 && fails === 0 && navigator.onLine !== false && !(document.fullscreenElement || document.webkitFullscreenElement)) location.reload();
 }, 60 * 1000);
 })();
 </script>
